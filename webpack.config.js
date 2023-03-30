@@ -31,10 +31,12 @@ export default {
   },
   entry: {
     index: './src/index.js',
+    common: './src/style.scss',
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      filename: 'index.html',
+      chunks: ['index', 'common'],
     }),
   ],
   output: {
