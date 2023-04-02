@@ -1,4 +1,8 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default {
   mode: process.env.NODE_ENV || 'development',
@@ -37,7 +41,17 @@ export default {
       template: './index.html',
     }),
   ],
+  devServer: {
+    port: 8008,
+  },
   output: {
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'dist'),
     clean: true,
+  },
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
   },
 };

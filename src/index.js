@@ -2,5 +2,6 @@
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './style.scss';
+import app from './model.js';
 
-console.log('Hello, World!');
+app();
