@@ -1,11 +1,13 @@
 const render = (form, err) => {
   const rssField = document.querySelector('#url-input');
+  const errorParagraph = document.querySelector('.text-danger');
   if (err !== null) {
-    const errorParagraph = document.querySelector('.text-danger');
     rssField.classList.add('is-invalid');
     errorParagraph.textContent = 'Ссылка должна быть валидным URL';
   } else {
     rssField.textContent = '';
+    rssField.classList.remove('is-invalid');
+    errorParagraph.textContent = '';
     form.reset();
     rssField.focus();
   }

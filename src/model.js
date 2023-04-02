@@ -12,10 +12,10 @@ const app = () => {
     },
   };
 
-  const addedFids = [];
   const form = document.querySelector('.rss-form');
 
   const watchedState = onChange(state, (path, value) => {
+    console.log(state);
     if (path === 'rssForm.inputState') {
       if (value === 'invalid') {
         render(form, watchedState.rssForm.error);
@@ -24,22 +24,24 @@ const app = () => {
   });
 
   form.addEventListener('submit', (event) => {
-    const { target } = event;
+    event.preventDefault();
+    const formData = new FormData(form).get('url');
 
-    const urlSchema = string().url();
-    const duplicationSchema = mixed().notOneOf(addedFids);
+    const urlSchema = string().required().url();
+    const duplicationSchema = mixed().notOneOf(state.rssForm.addedFids);
 
     urlSchema
-      .validate(target.value)
-      .then(() => duplicationSchema(target.value))
+      .validate(formData)
+      .then((result) => duplicationSchema.validate(result))
+      .then(() => watchedState.rssForm.addedFids.push(formData))
+      .then(() => (watchedState.rssForm.value = ''))
+      .then(() => (watchedState.rssForm.inputState = 'valid'))
+      .then(() => render(form, null))
       .catch((e) => {
         watchedState.rssForm.error = e;
         watchedState.rssForm.inputState = 'invalid';
-        return;
-      })
-      .then(() => state.rssForm.addedFids.push(target.value))
-      .then(() => watchedState.rssForm.value === '')
-      .then(() => render(form, null));
+        watchedState.rssForm.value = formData;
+      });
   });
 };
 

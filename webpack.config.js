@@ -39,10 +39,12 @@ export default {
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.html',
+      chunks: [],
     }),
   ],
   devServer: {
     port: 8008,
+    watchFiles: ['index.html'],
   },
   output: {
     filename: 'main.js',
