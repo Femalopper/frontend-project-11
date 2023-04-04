@@ -76,14 +76,18 @@ const runApp = (state) => {
           watchedState.rssForm.error = 'parse_error';
           watchedState.rssForm.inputState = 'invalid';
           watchedState.rssForm.value = formData;
-          return e;
         }
         console.log(state);
       })
       .catch((e) => {
-        watchedState.rssForm.error = e.errors[0].key;
-        watchedState.rssForm.inputState = 'invalid';
-        watchedState.rssForm.value = formData;
+        console.log(e.name === 'AxiosError');
+        if (e.name === 'AxiosError') {
+          watchedState.rssForm.error = 'network_error';
+        } else {
+          watchedState.rssForm.error = e.errors[0].key;
+          watchedState.rssForm.inputState = 'invalid';
+          watchedState.rssForm.value = formData;
+        }
       });
   });
 };
