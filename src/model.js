@@ -3,9 +3,10 @@ import runApp from './controller.js';
 const app = () => {
   const state = {
     rssForm: {
-      inputState: 'valid',
+      inputState: 'empty',
       value: '',
-      addedFids: [],
+      feeds: [],
+      posts: [],
       error: '',
     },
   };

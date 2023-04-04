@@ -7,5 +7,7 @@ export const ru = {
     example: 'Пример: https://ru.hexlet.io/lessons.rss',
     duplicate_rss_error: 'RSS уже существует',
     invalid_url_error: 'Ссылка должна быть валидным URL',
+    parse_error: 'Ресурс не содержит валидный RSS',
+    success: 'RSS успешно загружен',
   },
 };
