@@ -11,5 +11,6 @@ export const ru = {
     parse_error: 'Ресурс не содержит валидный RSS',
     network_error: 'Ошибка сети',
     success: 'RSS успешно загружен',
+    review: 'Просмотр',
   },
 };
