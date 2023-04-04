@@ -104,7 +104,11 @@ const render = (state, form) => {
     rssField.classList.add('is-invalid');
     errorParagraph.textContent = i18next.t(state.rssForm.error);
   }
-  if (state.rssForm.error === 'parse_error' || state.rssForm.error === 'network_error') {
+  if (
+    state.rssForm.error === 'parse_error' ||
+    state.rssForm.error === 'network_error' ||
+    state.rssForm.error === 'empty_field_error'
+  ) {
     rssField.classList.remove('is-invalid');
     errorParagraph.classList.add('text-danger');
     errorParagraph.textContent = i18next.t(state.rssForm.error);

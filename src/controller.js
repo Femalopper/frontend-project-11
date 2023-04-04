@@ -11,7 +11,7 @@ const runApp = (state) => {
   const watchedState = onChange(state, (path, value) => {
     console.log(state);
     if (path === 'rssForm.inputState') {
-      if (value === 'valid') {
+      if (value === 'valid' || value === 'empty') {
         render(state, form);
       }
     }
@@ -21,6 +21,7 @@ const runApp = (state) => {
   });
 
   form.addEventListener('submit', (event) => {
+    console.log('event');
     event.preventDefault();
     const formData = new FormData(form).get('url');
 
@@ -30,10 +31,11 @@ const runApp = (state) => {
       },
       mixed: {
         notOneOf: ({ notOneOf }) => ({ key: 'duplicate_rss_error', values: { notOneOf } }),
+        required: ({ required }) => ({ key: 'empty_field_error', values: { required } }),
       },
     });
 
-    const urlSchema = string().url();
+    const urlSchema = string().url().required();
     const feedsHrefs = state.rssForm.feeds.map(({ href }) => href);
     const duplicationSchema = mixed().notOneOf(feedsHrefs);
 
@@ -47,47 +49,47 @@ const runApp = (state) => {
       )
       .then((resp) => parseXml(resp.data.contents))
       .then((parsedData) => {
-        try {
-          const feedTitle = parsedData.querySelector('channel > title').textContent;
-          const feedDescription = parsedData.querySelector('channel > description').textContent;
-          Array.from(parsedData.getElementsByTagName('item')).map((item, index) => {
-            const postTitle = item.querySelector('title').textContent;
-            const postDescription = item.querySelector('description').textContent;
-            const href = item.querySelector('link').textContent;
-            watchedState.rssForm.posts.push({
-              id: index + 1,
-              feedId: state.rssForm.feeds.length + 1,
-              href,
-              postTitle,
-              postDescription,
-            });
+        const feedTitle = parsedData.querySelector('channel > title').textContent;
+        const feedDescription = parsedData.querySelector('channel > description').textContent;
+        Array.from(parsedData.getElementsByTagName('item')).map((item, index) => {
+          const postTitle = item.querySelector('title').textContent;
+          const postDescription = item.querySelector('description').textContent;
+          const href = item.querySelector('link').textContent;
+          watchedState.rssForm.posts.push({
+            id: index + 1,
+            feedId: state.rssForm.feeds.length + 1,
+            href,
+            postTitle,
+            postDescription,
           });
-          watchedState.rssForm.feeds.push({
-            id: state.rssForm.feeds.length + 1,
-            href: formData,
-            feedTitle,
-            feedDescription,
-          });
-          state.rssForm.value = '';
-          watchedState.rssForm.inputState = 'valid';
-          state.rssForm.error = '';
-          watchedState.rssForm.inputState = 'empty';
-        } catch (e) {
-          watchedState.rssForm.error = 'parse_error';
-          watchedState.rssForm.inputState = 'invalid';
-          watchedState.rssForm.value = formData;
-        }
+        });
+        watchedState.rssForm.feeds.push({
+          id: state.rssForm.feeds.length + 1,
+          href: formData,
+          feedTitle,
+          feedDescription,
+        });
         console.log(state);
       })
+      .then(() => {
+        state.rssForm.value = '';
+        watchedState.rssForm.inputState = 'valid';
+        state.rssForm.error = '';
+        watchedState.rssForm.inputState = 'empty';
+      })
       .catch((e) => {
-        console.log(e.name === 'AxiosError');
-        if (e.name === 'AxiosError') {
+        console.log(e.name);
+        if (e.name === 'TypeError') {
+          watchedState.rssForm.error = 'parse_error';
+        } else if (e.name === 'AxiosError') {
           watchedState.rssForm.error = 'network_error';
         } else {
+          console.log(e.errors[0]);
           watchedState.rssForm.error = e.errors[0].key;
-          watchedState.rssForm.inputState = 'invalid';
-          watchedState.rssForm.value = formData;
         }
+        watchedState.rssForm.inputState = 'invalid';
+        watchedState.rssForm.value = formData;
+        watchedState.rssForm.inputState = 'empty';
       });
   });
 };
