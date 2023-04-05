@@ -1,26 +1,29 @@
-import { string, mixed } from 'yup';
+import { string, mixed, setLocale } from 'yup';
 import onChange from 'on-change';
-import { formRender, feedsRender, postsRender, errorsRender } from './view.js';
-import { setLocale } from 'yup';
 import axios from 'axios';
+import { formRender, feedsRender, postsRender, errorsRender } from './view.js';
 import parseXml from './parser.js';
+import updatePosts from './updater.js';
+import addReviewHandler from './review-controller.js';
 
-const runApp = (state) => {
+const runApp = (i18nextInstance, state) => {
   const form = document.querySelector('.rss-form');
 
   const watchedState = onChange(state, (path) => {
     console.log(state);
     if (path === 'rssForm.feeds') {
-      formRender(form);
+      formRender(i18nextInstance, form);
       feedsRender(state);
-      postsRender(state);
-      updatePosts();
+      postsRender(i18nextInstance, state);
+      addReviewHandler(state, watchedState);
+      setTimeout(() => updatePosts(state, watchedState), 5000);
     }
     if (path === 'rssForm.posts') {
-      postsRender(state);
+      postsRender(i18nextInstance, state);
+      addReviewHandler(state, watchedState);
     }
     if (path === 'rssForm.error') {
-      errorsRender(state, form);
+      errorsRender(i18nextInstance, state, form);
     }
   });
 
@@ -59,11 +62,12 @@ const runApp = (state) => {
           const postDescription = item.querySelector('description').textContent;
           const href = item.querySelector('link').textContent;
           watchedState.rssForm.posts.push({
-            id: index + 1,
+            id: state.rssForm.posts.length + 1,
             feedId: state.rssForm.feeds.length + 1,
             href,
             postTitle,
             postDescription,
+            status: 'unread',
           });
         });
         watchedState.rssForm.feeds.push({
@@ -93,35 +97,6 @@ const runApp = (state) => {
         watchedState.rssForm.value = formData;
       });
   });
-
-  const updatePosts = () => {
-    console.log('5 sec');
-    state.rssForm.feeds.map(({ href }) => {
-      axios
-        .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(href)}`)
-        .then((resp) => parseXml(resp.data.contents))
-        .then((parsedData) => {
-          Array.from(parsedData.getElementsByTagName('item')).map((item, index) => {
-            const postTitle = item.querySelector('title').textContent;
-            const postDescription = item.querySelector('description').textContent;
-            const href = item.querySelector('link').textContent;
-            const posts = state.rssForm.posts.map(({ postTitle }) => postTitle);
-            if (!posts.includes(postTitle)) {
-              state.rssForm.posts.push({
-                id: index + 1,
-                feedId: state.rssForm.feeds.length + 1,
-                href,
-                postTitle,
-                postDescription,
-              });
-            }
-          });
-        })
-        .catch((e) => e);
-    });
-    watchedState.rssForm.posts = [...state.rssForm.posts];
-    setTimeout(() => updatePosts(), 5000);
-  };
 };
 
 export default runApp;
