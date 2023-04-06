@@ -22,7 +22,6 @@ const updatePosts = (state, watchedState) => {
   });
   watchedState.rssForm.posts = state.rssForm.posts;
   setTimeout(() => {
-    console.log('count');
     updatePosts(state, watchedState);
   }, 5000);
 };

@@ -48,7 +48,7 @@ const addSubmitHandler = (state, watchedState, form) => {
       })
       .then(() => {
         state.rssForm.value = '';
-        watchedState.rssForm.inputState = 'valid';
+        state.rssForm.inputState = 'valid';
         state.rssForm.error = '';
       })
       .catch((e) => {
@@ -59,7 +59,7 @@ const addSubmitHandler = (state, watchedState, form) => {
         } else {
           watchedState.rssForm.error = e.errors[0].key;
         }
-        watchedState.rssForm.inputState = 'invalid';
+        state.rssForm.inputState = 'invalid';
         watchedState.rssForm.value = formData;
       });
   });
