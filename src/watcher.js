@@ -10,27 +10,27 @@ const runApp = (i18nextInstance, state) => {
   const watchedState = onChange(state, (path) => {
     const choosePath = {
       'rssForm.feeds': () => {
-         formRender(i18nextInstance, form);
-         feedsRender(state);
-         postsRender(i18nextInstance, state);
-         addReviewHandler(state, watchedState);
-         if (state.rssForm.feeds.length === 1) {
-           setTimeout(() => updatePosts(state, watchedState), 5000);
+        formRender(i18nextInstance, form);
+        feedsRender(state);
+        postsRender(i18nextInstance, state);
+        addReviewHandler(state, watchedState);
+        if (state.rssForm.feeds.length === 1) {
+          setTimeout(() => updatePosts(state, watchedState), 5000);
         }
+        return true;
       },
       'rssForm.posts': () => {
-         postsRender(i18nextInstance, state);
-         addReviewHandler(state, watchedState);
+        postsRender(i18nextInstance, state);
+        addReviewHandler(state, watchedState);
+        return true;
       },
-      'rssForm.error': () => {
-         return errorsRender(i18nextInstance, state, form);
-      }
+      'rssForm.error': () => errorsRender(i18nextInstance, state, form),
     };
-    
+
     if (path === 'rssForm.value') {
       return true;
     }
-    choosePath[path]();
+    return choosePath[path]();
   });
 
   addSubmitHandler(state, watchedState, form);
