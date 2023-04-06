@@ -66,15 +66,10 @@ const postsRender = (i18nextInstance, state) => {
     }
     a.textContent = postTitle;
     const button = document.createElement('button');
-    button.setAttribute('type', 'button');
-    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-    button.setAttribute('data-id', id);
-    button.setAttribute('data-bs-toggle', 'modal');
-    button.setAttribute('data-bs-target', '#modal');
-    button.textContent = i18nextInstance.t('review');
     button.before(a);
     li.append(a, button);
     ul.append(li);
+    button.outerHTML = `<button type='button' class='btn btn-outline-primary btn-sm' data-id='${id}' data-bs-toggle='modal' data-bs-target='#modal'>${i18nextInstance.t('review')}</button>`;
     return true;
   });
   cardTitle.parentNode.after(ul);
