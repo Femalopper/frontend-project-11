@@ -15,12 +15,13 @@ const updatePosts = (state, watchedState) => {
           const link = item.querySelector('link').textContent;
           const posts = state.rssForm.posts.map(({ postTitle }) => postTitle);
           if (!posts.includes(post)) {
-            addPost(state, watchedState, post, postDescription, link);
+            addPost(state, state, post, postDescription, link);
           }
           return true;
         });
       })
       .catch((e) => e);
+    watchedState.rssForm.posts = [...state.rssForm.posts];
     return true;
   });
   setTimeout(() => updatePosts(state, watchedState), 5000);

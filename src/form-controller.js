@@ -36,7 +36,7 @@ const addSubmitHandler = (state, watchedState, form) => {
           const postTitle = item.querySelector('title').textContent;
           const postDescription = item.querySelector('description').textContent;
           const href = item.querySelector('link').textContent;
-          addPost(state, watchedState, postTitle, postDescription, href);
+          addPost(watchedState, state, postTitle, postDescription, href);
           return true;
         });
         watchedState.rssForm.feeds.push({
