@@ -27,10 +27,7 @@ const runApp = (i18nextInstance, state) => {
       'rssForm.error': () => errorsRender(i18nextInstance, state, form),
     };
 
-    if (path === 'rssForm.value') {
-      return true;
-    }
-    return choosePath[path]();
+    return (path === 'rssForm.value') ? true : choosePath[path]();
   });
 
   addSubmitHandler(state, watchedState, form);
