@@ -1,6 +1,6 @@
-import runApp from './controller.js';
 import i18next from 'i18next';
-import { ru } from './ru.js';
+import runApp from './controller.js';
+import ru from './ru.js';
 
 const app = () => {
   const state = {

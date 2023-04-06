@@ -10,13 +10,12 @@ const runApp = (i18nextInstance, state) => {
   const form = document.querySelector('.rss-form');
 
   const watchedState = onChange(state, (path) => {
-    console.log(state);
     if (path === 'rssForm.feeds') {
       formRender(i18nextInstance, form);
       feedsRender(state);
       postsRender(i18nextInstance, state);
       addReviewHandler(state, watchedState);
-      setTimeout(() => updatePosts(state, watchedState), 5000);
+      setTimeout(() => updatePosts(state, watchedState, addPost), 5000);
     }
     if (path === 'rssForm.posts') {
       postsRender(i18nextInstance, state);
@@ -26,6 +25,17 @@ const runApp = (i18nextInstance, state) => {
       errorsRender(i18nextInstance, state, form);
     }
   });
+
+  const addPost = (postTitle, postDescription, href) => {
+    watchedState.rssForm.posts.push({
+      id: state.rssForm.posts.length + 1,
+      feedId: state.rssForm.feeds.length + 1,
+      href,
+      postTitle,
+      postDescription,
+      status: 'unread',
+    });
+  };
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -48,27 +58,19 @@ const runApp = (i18nextInstance, state) => {
     urlSchema
       .validate(formData)
       .then((result) => duplicationSchema.validate(result))
-      .then(() =>
-        axios.get(
-          `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(formData)}`
-        )
-      )
+      .then(() => axios.get(
+        `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(formData)}`,
+      ))
       .then((resp) => parseXml(resp.data.contents))
       .then((parsedData) => {
         const feedTitle = parsedData.querySelector('channel > title').textContent;
         const feedDescription = parsedData.querySelector('channel > description').textContent;
-        Array.from(parsedData.getElementsByTagName('item')).map((item, index) => {
+        Array.from(parsedData.getElementsByTagName('item')).map((item) => {
           const postTitle = item.querySelector('title').textContent;
           const postDescription = item.querySelector('description').textContent;
           const href = item.querySelector('link').textContent;
-          watchedState.rssForm.posts.push({
-            id: state.rssForm.posts.length + 1,
-            feedId: state.rssForm.feeds.length + 1,
-            href,
-            postTitle,
-            postDescription,
-            status: 'unread',
-          });
+          addPost(postTitle, postDescription, href);
+          return true;
         });
         watchedState.rssForm.feeds.push({
           id: state.rssForm.feeds.length + 1,
@@ -76,7 +78,6 @@ const runApp = (i18nextInstance, state) => {
           feedTitle,
           feedDescription,
         });
-        console.log(state);
       })
       .then(() => {
         state.rssForm.value = '';
@@ -84,13 +85,11 @@ const runApp = (i18nextInstance, state) => {
         state.rssForm.error = '';
       })
       .catch((e) => {
-        console.log(e.name);
         if (e.name === 'TypeError') {
           watchedState.rssForm.error = 'parse_error';
         } else if (e.name === 'AxiosError') {
           watchedState.rssForm.error = 'network_error';
         } else {
-          console.log(e.errors[0]);
           watchedState.rssForm.error = e.errors[0].key;
         }
         watchedState.rssForm.inputState = 'invalid';

@@ -52,7 +52,7 @@ const postsRender = (i18nextInstance, state) => {
       'justify-content-between',
       'align-items-start',
       'border-0',
-      'border-end-0'
+      'border-end-0',
     );
     const a = document.createElement('a');
     a.setAttribute('href', href);
@@ -75,6 +75,7 @@ const postsRender = (i18nextInstance, state) => {
     button.before(a);
     li.append(a, button);
     ul.append(li);
+    return true;
   });
   cardTitle.parentNode.after(ul);
 };
@@ -97,14 +98,15 @@ const feedsRender = (state) => {
     p.before(h3);
     li.append(h3, p);
     ul.append(li);
+    return true;
   });
   cardTitle.parentNode.after(ul);
 };
 
 const errorsRender = (i18nextInstance, state) => {
   if (
-    state.rssForm.error === 'duplicate_rss_error' ||
-    state.rssForm.error === 'invalid_url_error'
+    state.rssForm.error === 'duplicate_rss_error'
+    || state.rssForm.error === 'invalid_url_error'
   ) {
     errorParagraph.classList.remove('text-success');
     errorParagraph.classList.add('text-danger');
@@ -112,9 +114,9 @@ const errorsRender = (i18nextInstance, state) => {
     errorParagraph.textContent = i18nextInstance.t(state.rssForm.error);
   }
   if (
-    state.rssForm.error === 'parse_error' ||
-    state.rssForm.error === 'network_error' ||
-    state.rssForm.error === 'empty_field_error'
+    state.rssForm.error === 'parse_error'
+    || state.rssForm.error === 'network_error'
+    || state.rssForm.error === 'empty_field_error'
   ) {
     rssField.classList.remove('is-invalid');
     errorParagraph.classList.add('text-danger');
