@@ -32,13 +32,13 @@ const addSubmitHandler = (state, watchedState, form) => {
       .then((parsedData) => {
         const feedTitle = parsedData.querySelector('channel > title').textContent;
         const feedDescription = parsedData.querySelector('channel > description').textContent;
-        Array.from(parsedData.getElementsByTagName('item')).map((item) => {
+        Array.from(parsedData.getElementsByTagName('item')).forEach((item) => {
           const postTitle = item.querySelector('title').textContent;
           const postDescription = item.querySelector('description').textContent;
           const href = item.querySelector('link').textContent;
-          addPost(watchedState, state, postTitle, postDescription, href);
-          return true;
+          addPost(state, postTitle, postDescription, href);
         });
+        watchedState.rssForm.posts = [...state.rssForm.posts];
         watchedState.rssForm.feeds.push({
           id: state.rssForm.feeds.length + 1,
           href: formData,

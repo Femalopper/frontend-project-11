@@ -13,7 +13,9 @@ const runApp = (i18nextInstance, state) => {
       feedsRender(state);
       postsRender(i18nextInstance, state);
       addReviewHandler(state, watchedState);
-      setTimeout(() => updatePosts(state, watchedState), 5000);
+      if (state.rssForm.feeds.length === 1) {
+        setTimeout(() => updatePosts(state, watchedState), 5000);
+      }
     }
     if (path === 'rssForm.posts') {
       postsRender(i18nextInstance, state);

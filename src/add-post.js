@@ -1,5 +1,5 @@
-const addPost = (inputState, state, postTitle, postDescription, href) => {
-  inputState.rssForm.posts.push({
+const addPost = (state, postTitle, postDescription, href) => {
+  state.rssForm.posts.push({
     id: state.rssForm.posts.length + 1,
     feedId: state.rssForm.feeds.length + 1,
     href,
