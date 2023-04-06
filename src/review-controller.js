@@ -4,7 +4,6 @@ const addReviewHandler = (state, watchedState) => {
   const changePostStatus = (reviewLinkId) => {
     watchedState.rssForm.posts = state.rssForm.posts.map((post) => {
       if (+post.id === +reviewLinkId) {
-        console.log({ ...post, status: 'read' });
         return { ...post, status: 'read' };
       }
       return post;

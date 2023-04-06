@@ -24,18 +24,7 @@ const runApp = (i18nextInstance, state) => {
     }
   });
 
-  const addPost = (postTitle, postDescription, href) => {
-    watchedState.rssForm.posts.push({
-      id: state.rssForm.posts.length + 1,
-      feedId: state.rssForm.feeds.length + 1,
-      href,
-      postTitle,
-      postDescription,
-      status: 'unread',
-    });
-  };
-
-  addSubmitHandler(state, watchedState, addPost, form);
+  addSubmitHandler(state, watchedState, form);
 };
 
 export default runApp;

@@ -1,8 +1,9 @@
 import { string, mixed, setLocale } from 'yup';
 import axios from 'axios';
 import parseXml from './parser.js';
+import addPost from './add-post.js';
 
-const addSubmitHandler = (state, watchedState, addPost, form) => {
+const addSubmitHandler = (state, watchedState, form) => {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(form).get('url');
@@ -35,7 +36,7 @@ const addSubmitHandler = (state, watchedState, addPost, form) => {
           const postTitle = item.querySelector('title').textContent;
           const postDescription = item.querySelector('description').textContent;
           const href = item.querySelector('link').textContent;
-          addPost(postTitle, postDescription, href);
+          addPost(state, watchedState, postTitle, postDescription, href);
           return true;
         });
         watchedState.rssForm.feeds.push({

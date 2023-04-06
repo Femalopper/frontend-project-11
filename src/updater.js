@@ -1,7 +1,8 @@
 import axios from 'axios';
 import parseXml from './parser.js';
+import addPost from './add-post.js';
 
-const updatePosts = (state, watchedState, addPost) => {
+const updatePosts = (state, watchedState) => {
   console.log('5 sec');
   state.rssForm.feeds.map(({ href }) => {
     axios
@@ -14,7 +15,7 @@ const updatePosts = (state, watchedState, addPost) => {
           const link = item.querySelector('link').textContent;
           const posts = state.rssForm.posts.map(({ postTitle }) => postTitle);
           if (!posts.includes(post)) {
-            addPost(post, postDescription, link);
+            addPost(state, watchedState, post, postDescription, link);
           }
           return true;
         });
