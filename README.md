@@ -20,8 +20,11 @@ RSS Reader is a service for RSS feeds aggregation, which let users to read vario
 ### Implemented features
 
 :heavy_check_mark: Form (validation, error handling)
+
 :heavy_check_mark: Posts (loading posts and updates every 5 seconds with the help of http requests)
+
 :heavy_check_mark: Feeds
+
 :heavy_check_mark: Preview (short post description)
 
 ### RSS feeds to test
