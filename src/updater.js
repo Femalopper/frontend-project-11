@@ -3,6 +3,7 @@ import parseXml from './parser.js';
 import addPost from './add-post.js';
 
 const updatePosts = (state, watchedState) => {
+  console.log(state);
   state.rssForm.feeds.forEach(({ href }) => {
     axios
       .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(href)}`)

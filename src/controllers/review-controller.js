@@ -1,4 +1,4 @@
-import { modalRender } from './view.js';
+import { modalRender } from '../view/view.js';
 
 const addReviewHandler = (state, watchedState) => {
   const changePostStatus = (reviewLinkId) => {

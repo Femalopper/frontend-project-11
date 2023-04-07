@@ -1,6 +1,6 @@
 import i18next from 'i18next';
-import runApp from './watcher.js';
-import ru from './ru.js';
+import runApp from '../watcher.js';
+import ru from '../locales/ru.js';
 
 const app = () => {
   const state = {

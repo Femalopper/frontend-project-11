@@ -1,8 +1,8 @@
 import onChange from 'on-change';
-import { formRender, feedsRender, postsRender, errorsRender } from './view.js';
+import { formRender, feedsRender, postsRender, errorsRender } from './view/view.js';
 import updatePosts from './updater.js';
-import addReviewHandler from './review-controller.js';
-import addSubmitHandler from './form-controller.js';
+import addReviewHandler from './controllers/review-controller.js';
+import addSubmitHandler from './controllers/form-controller.js';
 
 const runApp = (i18nextInstance, state) => {
   const form = document.querySelector('.rss-form');

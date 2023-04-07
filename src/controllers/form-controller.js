@@ -1,7 +1,7 @@
 import { string, mixed, setLocale } from 'yup';
 import axios from 'axios';
-import parseXml from './parser.js';
-import addPost from './add-post.js';
+import parseXml from '../parser.js';
+import addPost from '../add-post.js';
 
 const addSubmitHandler = (state, watchedState, form) => {
   form.addEventListener('submit', (event) => {
