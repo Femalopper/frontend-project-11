@@ -21,7 +21,7 @@ const updatePosts = (state, watchedState) => {
       })
       .catch((e) => e);
   });
-  watchedState.rssForm.posts = state.rssForm.posts;
+  watchedState.rssForm.posts = [...state.rssForm.posts];
   setTimeout(() => {
     updatePosts(state, watchedState);
   }, 5000);
