@@ -8,7 +8,7 @@ const modalRender = (state, linkId) => {
   const modalTitle = document.querySelector('.modal-title');
   modalTitle.textContent = reviewedPost[0].postTitle;
   const modalBody = document.querySelector('.modal-body');
-  modalBody.textContent = reviewedPost[0].postDescription;
+  modalBody.innerHTML = reviewedPost[0].postDescription;
   const read = document.querySelector('.full-article');
   read.setAttribute('href', reviewedPost[0].href);
 };
