@@ -37,5 +37,4 @@ export default {
     }),
     new MiniCssExtractPlugin(),
   ],
-  entry: ['./src/styles/style.css', './src/index.js'],
 };

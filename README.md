@@ -4,7 +4,7 @@
 
 ## Reference
 
-https://frontend-project-11-mu-ten.vercel.app/
+https://frontend-project-11-jg05j2ip1-femalopper.vercel.app/
 
 ## Description
 
@@ -26,6 +26,21 @@ RSS Reader is a service for RSS feeds aggregation, which let users to read vario
 :heavy_check_mark: Feeds
 
 :heavy_check_mark: Preview (short post description)
+
+### Setup
+
+```sh
+
+git clone git@github.com:Femalopper/frontend-project-11.git
+
+cd frontend-project-11
+
+make install
+
+make develop
+
+```
+Open browser and enter - http://localhost:8080/.
 
 ### RSS feeds to test
 
